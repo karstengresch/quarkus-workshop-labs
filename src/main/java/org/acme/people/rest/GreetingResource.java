@@ -31,4 +31,15 @@ public class GreetingResource {
     public String greeting(@PathParam("name") String name) {
         return service.greeting(name);
     }
+
+    @GET
+    @Path("/lastletter/{name}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String lastLetter(@PathParam("name") String name) {
+        int len = name.length();
+        String lastLetter = name.substring(len);
+        // String lastLetter = name.substring(len - 1);
+        log.info("Got last letter: " + lastLetter);
+        return lastLetter;
+    }
 }
