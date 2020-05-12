@@ -18,6 +18,7 @@ public class GreetingServiceTest {
 
     @Test
     public void testGreetingService() {
+        LOGGER.info("greeting: " + service.greeting("Quarkus"));
         Assertions.assertTrue(service.greeting("Quarkus").startsWith("hello Quarkus"));
     }
 }
