@@ -2,7 +2,8 @@ package org.acme.people.rest;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
@@ -11,14 +12,21 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.enterprise.context.ApplicationScoped;
+
+import org.acme.people.model.DataTable;
 import org.acme.people.model.EyeColor;
 import org.acme.people.model.Person;
 import org.acme.people.utils.CuteNameGenerator;
-import org.acme.people.model.DataTable;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.runtime.StartupEvent;
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 @Path("/person")
 @ApplicationScoped
@@ -37,6 +45,11 @@ public class PersonResource {
         return Person.findByColor(color);
     }
 
+    @Operation(summary = "Finds people born before a specific year", description = "Search the people database and return a list of people born before the specified year")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "The list of people born before the specified year", content = @Content(schema = @Schema(implementation = Person.class))),
+            @APIResponse(responseCode = "500", description = "Something bad happened") })
+    @Parameter(description = "Cutoff year for searching for people", required = true, name = "year")
     @GET
     @Path("/birth/before/{year}")
     @Produces(MediaType.APPLICATION_JSON)
