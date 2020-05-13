@@ -19,7 +19,7 @@ import org.acme.people.model.DataTable;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
- 
+
 @Path("/person")
 @ApplicationScoped
 public class PersonResource {
@@ -29,6 +29,21 @@ public class PersonResource {
         return Person.listAll();
     }
     // TODO: add basic queries
+
+    @GET
+    @Path("/eyes/{color}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Person> findByColor(@PathParam(value = "color") EyeColor color) {
+        return Person.findByColor(color);
+    }
+
+    @GET
+    @Path("/birth/before/{year}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Person> getBeforeYear(@PathParam(value = "year") int year) {
+        return Person.getBeforeYear(year);
+    }
+
     // TODO: add datatable query
     // TODO: Add lifecycle hook
 }
