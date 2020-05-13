@@ -1,10 +1,21 @@
 #!/bin/bash
 
-read -p "adding extensions"
-mvn quarkus:add-extension -Dextensions="hibernate-orm-panache, jdbc-h2, jdbc-postgresql, resteasy-jsonb"
+read -p "execute basic queries"
+curl -s http://localhost:8080/person/eyes/BLUE | jq
+read
+curl -s http://localhost:8080/person/birth/before/1990 | jq
 
-read -p "datasource settings"
-grep datasource src/main/resources/application.properties
+read -p "execute filtered queries"
+curl -s "http://localhost:8080/person/datatable?draw=1&start=0&length=10&search\[value\]=yan" | jq
+
+read -p "execute lifecycle query"
+curl -s "http://localhost:8080/person/datatable?draw=1&start=0&length=2&search\[value\]=F" | jq
+
+#read -p "adding extensions"
+#mvn quarkus:add-extension -Dextensions="hibernate-orm-panache, jdbc-h2, jdbc-postgresql, #resteasy-jsonb"
+#
+#read -p "datasource settings"
+#grep datasource src/main/resources/application.properties
 
 #read -p "create enum EyeColor.java"
 #cat <<EOF >src/main/java/org/acme/people/model/EyeColor.java
@@ -84,3 +95,4 @@ grep datasource src/main/resources/application.properties
 #    // TODO: Add lifecycle hook
 #}
 #EOF
+
