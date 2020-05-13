@@ -2,11 +2,14 @@ package org.acme.people.rest;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -27,10 +30,30 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.runtime.StartupEvent;
+import io.vertx.axle.core.eventbus.EventBus;
+import io.vertx.axle.core.eventbus.Message;
 
 @Path("/person")
 @ApplicationScoped
 public class PersonResource {
+
+    @Inject
+    EventBus bus;
+
+    @POST
+    @Path("/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public CompletionStage<Person> addPerson(@PathParam("name") String name) {
+        return bus.<Person>send("add-person", name).thenApply(Message::body);
+    }
+
+    @GET
+    @Path("/name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Person byName(@PathParam("name") String name) {
+        return Person.find("name", name).firstResult();
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Person> getAll() {
