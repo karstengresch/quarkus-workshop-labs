@@ -5,11 +5,13 @@ import javax.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
+import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
 import io.smallrye.reactive.messaging.annotations.Broadcast;
 
+@Traced
 @ApplicationScoped
 public class NameConverter {
     private static final String[] honorifics = { "Mr.", "Mrs.", "Sir", "Madam", "Lord", "Lady", "Dr.", "Professor",

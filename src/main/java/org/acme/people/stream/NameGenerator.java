@@ -5,10 +5,12 @@ import java.util.concurrent.TimeUnit;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.acme.people.utils.CuteNameGenerator;
+import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
 import io.reactivex.Flowable;
 
+@Traced
 @ApplicationScoped
 public class NameGenerator {
 

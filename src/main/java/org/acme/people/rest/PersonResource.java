@@ -3,6 +3,8 @@ package org.acme.people.rest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -19,6 +21,8 @@ import javax.ws.rs.core.MediaType;
 import org.acme.people.model.DataTable;
 import org.acme.people.model.EyeColor;
 import org.acme.people.model.Person;
+import org.acme.people.model.StarWarsPerson;
+import org.acme.people.service.StarWarsService;
 import org.acme.people.utils.CuteNameGenerator;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -26,6 +30,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.opentracing.Traced;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
@@ -33,9 +39,21 @@ import io.quarkus.runtime.StartupEvent;
 import io.vertx.axle.core.eventbus.EventBus;
 import io.vertx.axle.core.eventbus.Message;
 
+@Traced
 @Path("/person")
 @ApplicationScoped
 public class PersonResource {
+
+    @Inject
+    @RestClient
+    StarWarsService swService;
+
+    @GET
+    @Path("/swpeople")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<StarWarsPerson> getCharacters() {
+        return IntStream.range(1, 6).mapToObj(swService::getPerson).collect(Collectors.toList());
+    }
 
     @Inject
     EventBus bus;
