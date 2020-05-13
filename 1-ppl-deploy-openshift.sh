@@ -4,9 +4,8 @@ PROJECT=${1:-quarkus-lab}
 #set -x
 oc project ${PROJECT}
 
-echo "native s2i build"
+read -p "native s2i build"
 
-read
 oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java11~https://github.com/j1cken/quarkus-workshop-labs.git#cloud-native --name='ppl-native' -l "app.openshift.io/runtime=quarkus,app.kubernetes.io/part-of=people,app=people"
 read
 oc expose service ppl-native
@@ -14,9 +13,8 @@ read
 oc rollout status -w dc/ppl-native
 
 # Minimal Runtime Build
-echo "minimal runtime build"
+read -p "minimal runtime build"
 
-read
 oc new-build --name=minimal-ppl-native \
     --docker-image=registry.access.redhat.com/ubi8-minimal \
     --source-image=ppl-native \
@@ -28,9 +26,8 @@ read
 oc expose svc minimal-ppl-native
 
 
-echo "call service"
+read -p "call service"
 
-read
 curl $(oc get route ppl-native -o=go-template --template='{{ .spec.host }}')/hello/greeting/quarkus-on-openshift
 read
 curl $(oc get route minimal-ppl-native -o=go-template --template='{{ .spec.host }}')/hello/greeting/quarkus-on-openshift
