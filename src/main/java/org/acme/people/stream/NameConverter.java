@@ -2,6 +2,9 @@ package org.acme.people.stream;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
@@ -12,6 +15,8 @@ public class NameConverter {
     private static final String[] honorifics = { "Mr.", "Mrs.", "Sir", "Madam", "Lord", "Lady", "Dr.", "Professor",
             "Vice-Chancellor", "Regent", "Provost", "Prefect" };
 
+    @Counted(name = "convertedNames", description = "How many names have been converted.")
+    @Timed(name = "converter", description = "A measure how long it takes to convert names.", unit = MetricUnits.MILLISECONDS)
     @Incoming("names")
     @Outgoing("my-data-stream")
     @Broadcast
