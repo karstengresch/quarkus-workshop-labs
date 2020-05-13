@@ -22,5 +22,4 @@ oc rollout status dc people
 read -p "test request"
 curl -iv -s $(oc get route people -o=go-template --template='{{ .spec.host }}')/person/birth/before/2000 | jq
 
-
-echo "\n\nopen $(oc get route people -o=go-template --template='{{ .spec.host }}')/datatable.html"
+echo "\n\nopen http://$(oc get route people -o=go-template --template='{{ .spec.host }}')/datatable.html"
