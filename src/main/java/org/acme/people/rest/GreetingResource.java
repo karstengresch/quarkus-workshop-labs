@@ -33,6 +33,7 @@ public class GreetingResource {
             }
         }
         outputNumber = String.valueOf(inputNumberConverted + 42);
+        System.out.println("Going to output: " + outputNumber);
         return outputNumber;
     }
 
