@@ -21,7 +21,6 @@ public class GreetingResource {
 
     @GET
     @Path("/{inputNumber}")
-    
     public String addAnswer(@DefaultValue("-42") @PathParam("inputNumber") String inputNumber) {
         Integer inputNumberConverted = -1;
         String outputNumber = "-1";
@@ -36,4 +35,10 @@ public class GreetingResource {
         outputNumber = String.valueOf(inputNumberConverted + 42);
         return outputNumber;
     }
+
+    @GET
+    public String giveAnswer() {
+        return "42";
+    }
+
 }

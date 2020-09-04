@@ -14,10 +14,10 @@ public class GreetingResourceTest {
     @Test
     public void testHelloEndpoint() {
         given()
-          .when().get("/hello")
+          .when().get("/add-answer/0")
           .then()
              .statusCode(200)
-             .body(is("hello"));
+             .body(is("42"));
     }
 
     // add more tests
